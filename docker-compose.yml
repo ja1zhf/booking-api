@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    container_name: booking_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: booking
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: booking_api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/booking
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "yarn prisma migrate deploy && node dist/main.js"
+
+    volumes:
+      - .:/app
+volumes:
+  postgres_data:
