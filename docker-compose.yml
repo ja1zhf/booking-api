@@ -21,9 +21,9 @@ services:
       - db
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/booking
-      PORT: 3000
+      PORT: 7642
     ports:
-      - "3000:3000"
+      - "7642:7642"
     command: >
       sh -c "yarn prisma migrate deploy && node dist/main.js"
 
